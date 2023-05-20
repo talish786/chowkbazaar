@@ -1,14 +1,12 @@
 import React from "react";
-
-import TopNav from "../../components/Admin/TopNav";
-import Sidebar from "../../components/Admin/Sidebar";
+import Wrapper from "./Wrapper";
 
 const Dashboard = () => {
   return (
     <>
-      <div>
-        <Sidebar />
-      </div>
+      <Wrapper>
+        <div className="bg-gray-800 text-white p-4">Dashboard</div>
+      </Wrapper>
     </>
   );
 };

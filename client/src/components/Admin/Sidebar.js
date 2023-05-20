@@ -4,14 +4,17 @@ import { FiHome } from "react-icons/fi";
 import { FaStore } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 import { FiShoppingBag } from "react-icons/fi";
+import { IoClose,IoClipboardSharp } from "react-icons/io5";
 
-const Sidebar = () => {
+const Sidebar = ({side,closeSidebar}) => {
   return (
     <>
-      <div className="fixed top-0 left-0 w-64 h-screen bg-gray-800">
-        <div className="bg-white p-4">
-          <img src="/logo.svg" />
-        </div>
+      <div className={`fixed top-0 ${side} sm:left-0 w-64 h-screen bg-gray-800 z-10`}>
+      <IoClose className="absolute top-5 right-4 sm:hidden block cursor-pointer text-lg"  onClick={closeSidebar}/>
+      <div className="bg-white p-4">
+        <img src="/logo.svg" alt="logo" />
+        
+      </div>
         <ul className="sidebarNav">
           <li>
             <NavLink
@@ -20,6 +23,15 @@ const Sidebar = () => {
             >
               <FiHome className="mr-2 "/>
               <span>Dashboard</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/dashboard/categories"
+              className="p-4 text-white flex items-center hover:bg-gray-600"
+            >
+              <IoClipboardSharp className="mr-2" />
+              Categories
             </NavLink>
           </li>
           <li>
