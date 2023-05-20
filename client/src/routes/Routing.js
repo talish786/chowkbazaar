@@ -1,5 +1,11 @@
 import AdminLogin from "../screens/auth/AdminLogin";
+import Dashboard from "../screens/admin/Dashboard";
 import Home from "../screens/Home";
+import Private from "./Private";
+import Public from "./Public";
+import Products from "../screens/admin/Products/Index";
+import Orders from "../screens/admin/Orders/Index";
+import Customers from "../screens/admin/Customers/Index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const Routing = () => {
@@ -8,7 +14,13 @@ const Routing = () => {
             <Routes>
             <Route path="/" element={<Home />}/>
                 <Route path="auth">
-                    <Route path="admin-login" element={<AdminLogin />}/>
+                    <Route path="admin-login" element={<Public><AdminLogin /></Public>}/>
+                </Route>
+                <Route path="dashboard">
+                    <Route path="home" element={<Private><Dashboard /></Private>}/>
+                    <Route path="products" element={<Private><Products /></Private>}/>
+                    <Route path="orders" element={<Private><Orders /></Private>}/>
+                    <Route path="customers" element={<Private><Customers /></Private>}/>
                 </Route>
             </Routes>
         </BrowserRouter>

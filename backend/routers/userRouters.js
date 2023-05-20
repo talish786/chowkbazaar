@@ -2,9 +2,9 @@ const express = require("express");
 
 const { body, validationResult } = require('express-validator');
 
-const {registerValidation,loginValidation} = require("../../validation/userRegistrationValidation");
+const {registerValidation,loginValidation} = require("../validation/userRegistrationValidation");
 
-const {register,login} = require("../../controllers/userRegisterController");
+const {register,login} = require("../controllers/userRegisterController");
 
 const router = express.Router();
 

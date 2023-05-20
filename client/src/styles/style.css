@@ -1,0 +1,3 @@
+.sidebarNav li a.active{
+    @apply bg-violet-700
+}
