@@ -1,30 +1,40 @@
-const express       = require('express')
-const app           = express()
-const env           = require("./config/envConfig");
-const connect       = require("./config/db");
-const userRoutes    = require("./routers/userRouters");
-const categoryRoutes= require("./routers/categoryRoutes");
-const cors          = require("cors");
-//connect database
+const express = require("express");
+const env = require("./config/envConfig");
+const cors = require("cors");
+const connect = require("./config/db");
+const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const productRoutes = require("./routes/productRoutes");
+const paymentRoutes = require("./routes/payment");
+const orderRoutes = require("./routes/orderRoutes");
+const app = express();
+
+// database connection
 connect();
-
-
-app.use(express.json());
 app.use(cors());
+app.post(
+  "/api/webhook",
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
+// add middleware
+app.use(express.json());
 
-app.get("/",(req,res)=>{
-    res.json({"msg":"Hello Talish Nazir"});
+app.get("/", (req, res) => {
+  res.json({ msg: "Welcome to ecommerce backend API" });
 });
+// user routes
+app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
+app.use("/api", paymentRoutes);
+app.use("/api", orderRoutes);
 
+const port = env.PORT || 5000;
 
-//User Routes
-app.use("/api",userRoutes);
-
-app.use("/api/category",categoryRoutes);
-
-//PORT
-const port          = env.PORT || 5000;
-
-app.listen(port,()=>{
-    console.log(`Your Server is running at ${port}`);
+app.listen(port, () => {
+  console.log(`Your server is running at port number: ${port}`);
 });
