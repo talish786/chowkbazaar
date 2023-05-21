@@ -41,7 +41,7 @@ const AdminLogin = () => {
           <h3 className="mb-4 text-white capitalize font-semibold text-lg">Admin Dashboard</h3>
           {errors.length > 0 && errors.map((error, key) => (
                    <div key={key}>
-                       <p className="bg-rose-100 text-rose-700 p-3 mb-2 border-l-4 border-rose-600 text-sm font-medium">{error.msg}</p>
+                       <p className="alert-danger">{error.msg}</p>
                    </div>
              )) }
           <div className="mb-4">

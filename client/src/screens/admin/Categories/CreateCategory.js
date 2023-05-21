@@ -4,12 +4,50 @@ import ScreenHeader from "../../../components/Admin/ScreenHeader";
 import { IoArrowBack } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useCreateMutation } from "../../../store/services/categoryService";
+import { Switch } from "@headlessui/react";
+
 const CreateCategory = () => {
-  const [state, setState] = useState("");
+  const [state, setState] = useState({
+    parentcategory: "",
+    categoryname: "",
+    enabled: "",
+    inmenu: "",
+  });
+
+  const [enabled, setEnabled] = useState(false);
+  const [inMenu, setInMenu] = useState(false);
+  const [saveCategory, data] = useCreateMutation();
+  console.log(data);
+  const errors = data?.error?.data?.errors ? data?.error?.data?.errors : [];
   const submitCategory = (e) => {
     e.preventDefault();
+    if (enabled) {
+      state.enabled = 1;
+    } else {
+      state.enabled = 0;
+    }
+
+    if (inMenu) {
+      state.inmenu = 1;
+    } else {
+      state.inmenu = 0;
+    }
+
+    if (!state.parentcategory.length > 0) {
+      state.parentcategory = 0;
+    }
+
+    saveCategory(state);
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data?.isSuccess) {
+      navigate("/dashboard/categories");
+    }
+  }, [data?.isSuccess]);
   return (
     <>
       <Wrapper>
@@ -25,38 +63,71 @@ const CreateCategory = () => {
         <h3 className="text-lg capitalize mb-3">Create Category</h3>
         <div className="flex justify-center items-center">
           <form className="w-full md:w-6/12" onSubmit={submitCategory}>
+            {errors.length > 0 &&
+              errors.map((error, key) => (
+                <div className="mb-6">
+                  <p className="alert-danger" key={key}>
+                    {error.msg}
+                  </p>
+                </div>
+              ))}
             <div className="flex items-center mb-6">
               <label className="w-1/3 mr-2">Parent Category</label>
-              <select class="text-sm rounded-lg block w-full form-control flex-1">
-                <option selected>No Parent Categroy</option>
+              <select
+                className="text-sm rounded-lg block w-full form-control flex-1"
+                name="parentcategory"
+                value={state.parentcategory}
+                onChange={(e) =>
+                  setState({ ...state, parentcategory: e.target.value })
+                }
+              >
+                <option value="">No Parent Categroy</option>
               </select>
             </div>
             <div className="flex items-center mb-6">
               <label className="w-1/3 mr-2">Category Name</label>
               <input
                 type="text"
-                name=""
+                name="categoryname"
                 className="form-control flex-1"
                 placeholder="Category Name..."
-                value={state}
-                onChange={(e) => setState(e.target.value)}
+                value={state.categoryname}
+                onChange={(e) =>
+                  setState({ ...state, categoryname: e.target.value })
+                }
               />
             </div>
             <div className="flex items-center mb-6">
               <label className="w-1/3 mr-2">Enable Category</label>
-              <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" class="sr-only peer" />
-                <div class="w-11 h-6 bg-gray-700 outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-900"></span>
-              </label>
+              <Switch
+                checked={enabled}
+                onChange={setEnabled}
+                className={`${enabled ? "bg-teal-900" : "bg-gray-700"}
+    relative inline-flex h-[24px] w-[40px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+              >
+                <span className="sr-only">Use setting</span>
+                <span
+                  aria-hidden="true"
+                  className={`${enabled ? "translate-x-4" : "translate-x-0"}
+      pointer-events-none inline-block h-[20px] w-[20px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                />
+              </Switch>
             </div>
             <div className="flex items-center mb-6">
               <label className="w-1/3 mr-2">Include in Menu</label>
-              <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" class="sr-only peer" />
-                <div class="w-11 h-6 bg-gray-700 outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-900"></span>
-              </label>
+              <Switch
+                checked={inMenu}
+                onChange={setInMenu}
+                className={`${inMenu ? "bg-teal-900" : "bg-gray-700"}
+    relative inline-flex h-[24px] w-[40px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+              >
+                <span className="sr-only">Use setting</span>
+                <span
+                  aria-hidden="true"
+                  className={`${inMenu ? "translate-x-4" : "translate-x-0"}
+      pointer-events-none inline-block h-[20px] w-[20px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                />
+              </Switch>
             </div>
             <div className="flex justify-center">
               <input

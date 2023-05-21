@@ -6,9 +6,9 @@ class Category {
     if (errors.isEmpty()) {
       const { parentcategory, categoryname, enabled,inmenu } = req.body;
       try {
-        const exist = await categoryModel.findOne({ categoryname });
+        const exist = await CatgoryModel.findOne({ categoryname });
         if (!exist) {
-          await categoryModel.create({
+          await CatgoryModel.create({
             parentcategory,
             categoryname,
             enabled,
